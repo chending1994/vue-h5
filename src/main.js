@@ -15,10 +15,13 @@ Vue.prototype.$cdn = $cdn
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 
+import VueClipboard from 'vue-clipboard2'
+
 // import 'swiper/dist/css/swiper.css';
 import 'swiper/css/swiper.css' //注意这里  
 
 Vue.use(VueAwesomeSwiper, /* { default global options } */)
+Vue.use(VueClipboard)
 
 // 全局引入按需引入UI库 vant
 import '@/plugins/vant'

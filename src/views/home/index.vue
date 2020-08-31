@@ -42,8 +42,8 @@
             </div>
           </div>
           <div class="item-footer">
-            <div class="footer-btn">去购买</div>
-            <div class="footer-btn">去购买</div>
+            <div class="footer-btn"  v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
+            <div class="footer-btn"  v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
           </div>
         </div>
         </swiper-slide>
@@ -104,6 +104,8 @@ export default {
         direction: 'vertical',
         // slidesPerView: 3,
         slidesPerView: 'auto',
+        centeredSlides: true,
+        loop: true, // 循环
         // autoHeight: true,
         // autoplay: {
         //   // 自动播放
@@ -126,7 +128,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/01_luosifeng/right.jpg'),
           rightName: '螺霸王',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$O98mcdB03C7$',
+          rightToken: '$YcrDcdB0EXf$'
         },
         {
           title: '好吃又健康的面包，你更喜欢哪种？',
@@ -135,7 +139,9 @@ export default {
           leftValue: 1,
           imgRightUrl: require('../../assets/images/2_miangbao/right.jpg'),
           rightName: '全麦黑麦面包',
-          rightValue: 2
+          rightValue: 2,
+          leftToken: '$v2UNcdBc4LM$',
+          rightToken: '$BPJqcdBcqFq$'
         },
         {
           title: '早餐喜欢吃哪种麦片？',
@@ -144,7 +150,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/3_maipian/right.jpg'),
           rightName: '桂格即食燕麦片',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$Iv2HcdBdDl5$',
+          rightToken: '$IWAfcdBWvMv$'
         },
         {
           title: '哪种爽辣零食最解压？',
@@ -153,7 +161,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/4_suangla/right.jpg'),
           rightName: '牛板筋',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$JWQecdB3Rnd$',
+          rightToken: '$IJ7kcdz0bBz$'
         },
         {
           title: '办公室下午茶喜欢吃哪种零食？',
@@ -162,7 +172,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/5_bangongshi/right.jpg'),
           rightName: '三只松鼠炭烧腰果',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$GX1CcdBBVcx$',
+          rightToken: '$UNsHcdBAmSK$'
         },
         {
           title: '你觉得最经典的薯片是哪种？',
@@ -171,7 +183,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/6_zuijindiansupian/right.jpg'),
           rightName: '可比克薯片',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$XtdjcdBfPtR$',
+          rightToken: '$0MqvcdBgZJn$'
         },
         {
           title: '你最喜欢哪种果肉干？',
@@ -180,7 +194,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/7_nizuixihuan/right.jpg'),
           rightName: '榴莲干',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$pbKvcdBgmvx$',
+          rightToken: '$2hoqcdBTqZP$'
         },
         {
           title: '喜欢吃哪种饼干',
@@ -189,7 +205,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/8_binggang/right.jpg'),
           rightName: '奥利奥饼干',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$ppfPcdzYnqz$',
+          rightToken: '$J4Zacdz1MdK$'
         },
         {
           title: '哪种牛奶更好喝？',
@@ -198,7 +216,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/9_niunai/right.jpg'),
           rightName: '旺仔牛奶',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$hL3zcdBIbaF$',
+          rightToken: '$Sja9cdBHeo4$'
         },
         {
           title: '韩国网红方便面，喜欢吃哪个？',
@@ -207,7 +227,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/10_fanbianmian/right.jpg'),
           rightName: '三养火鸡面',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$DKW4cdBhRpN$',
+          rightToken: '$2ahHcdBhksB$'
         },
         {
           title: '哪个自热火锅最好吃？',
@@ -216,17 +238,20 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/11_zirehuoguo/right.jpg'),
           rightName: '小龙坎',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$AHqtcdBi0ry$',
+          rightToken: '$3PmdcdBiYKs$'
         },
         {
           title: '网红速食好物，更喜欢吃哪个？',
           imgLeftUrl: require('../../assets/images/12_wanghonsushi/left.jpg'),
           leftName: '阿宽红油面皮',
           leftValue: 0,
-
           imgRightUrl: require('../../assets/images/12_wanghonsushi/right.jpg'),
           rightName: '顾大嫂拌面',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$vz52cdBjKnL$',
+          rightToken: '$YcrDcdB0EXf$'
         },
         {
           title: '哪种雪糕更好吃？',
@@ -235,7 +260,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/13_xuegao/right.jpg'),
           rightName: '梦龙',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$MWLicdzTpq9$',
+          rightToken: '$A9VicdzhOnD$'
         },
         {
           title: '小时候吃的最多的童年零食是哪个？',
@@ -244,7 +271,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/14_tongnianlingshi/right.jpg'),
           rightName: '旺旺仙贝',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$IqxxcdBksCG$',
+          rightToken: '$DR1AcdBP1LW$'
         },
         {
           title: '哪种无糖饮料更好喝？',
@@ -253,7 +282,9 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/15_wutangyingliao/right.jpg'),
           rightName: '零度无糖可乐',
-          rightValue: 0
+          rightValue: 0,
+          leftToken: '$ufgPcdBNia9$',
+          rightToken: '$tcPScdBr5Vq$'
         }
         // {
         //   title: '浙江杭帮菜，你更爱哪个？',
@@ -290,7 +321,14 @@ export default {
   methods: {
     handleChoose(index) {
       console.log(index)
-    }
+    },
+    onCopy(e) {
+      Toast.success('复制成功');
+      window.location.href = 'taobao://';
+    },
+    onError(e) {
+      console.log(e);
+    },
   }
 }
 </script>
@@ -302,7 +340,7 @@ export default {
     height: 100vh;
     .swiper-slide {
       height: 936px;
-      margin-bottom: 30px;
+      margin: 30px 0;
     }
   }
   .list {
