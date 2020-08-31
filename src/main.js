@@ -12,6 +12,14 @@ import store from './store'
 import { $cdn } from '@/config'
 Vue.prototype.$cdn = $cdn
 
+
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
+// import 'swiper/dist/css/swiper.css';
+import 'swiper/css/swiper.css' //注意这里  
+
+Vue.use(VueAwesomeSwiper, /* { default global options } */)
+
 // 全局引入按需引入UI库 vant
 import '@/plugins/vant'
 // 引入全局样式

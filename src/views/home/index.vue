@@ -1,23 +1,25 @@
 <!-- home -->
 <template>
   <div class="index-container">
-    <div class="list">
-      <template v-for="(item,index) in cardlist">
+    <div class="swiper-box list">
+      <swiper class="box-container" :options="swiperOption" ref="mySwiper">
+        <swiper-slide
+          v-for="(item, index) in cardlist"
+          :key="index"
+        >
         <div :class="['card-item', index != 1 ?  'filter' : '']" :key="index">
-          <div class="item-header">
-            {{ item.title }}
-          </div>
+          <div class="item-header">{{ item.title }}</div>
           <div class="item-content">
             <div class="item-content-left" @click="handleChoose(index)">
               <van-image fit="cover" :src="item.imgLeftUrl" />
-              <div class="mask">
-              </div>
-              <div class="tag">
-                #{{item.leftName}}#
-              </div>
+              <div class="mask"></div>
+              <div class="tag">#{{item.leftName}}#</div>
               <div class="vote" v-if="index == 1">
                 <div class="line nor">
-                  <div :class="['line-true', 'nor']" :style="{ height: toPercent(item).leftPrecent }">
+                  <div
+                    :class="['line-true', 'nor']"
+                    :style="{ height: toPercent(item).leftPrecent }"
+                  >
                     <div class="percent">{{ toPercent(item).leftPrecent }}</div>
                   </div>
                 </div>
@@ -25,14 +27,58 @@
             </div>
             <div class="item-content-right" @click="handleChoose(index)">
               <van-image fit="cover" :src="item.imgRightUrl" />
-              <div class="mask">
-              </div>
-              <div class="tag">
-                #{{item.rightName}}#
-              </div>
+              <div class="mask"></div>
+              <div class="tag">#{{item.rightName}}#</div>
               <div class="vote" v-if="index == 1">
                 <div class="line active">
-                  <div :class="['line-true', 'active']" :style="{ height: toPercent(item).rightPrecent }">
+                  <div
+                    :class="['line-true', 'active']"
+                    :style="{ height: toPercent(item).rightPrecent }"
+                  >
+                    <div class="percent">{{ toPercent(item).rightPrecent }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item-footer">
+            <div class="footer-btn">去购买</div>
+            <div class="footer-btn">去购买</div>
+          </div>
+        </div>
+        </swiper-slide>
+      </swiper>
+    </div>
+    <!-- <div class="list">
+      <template v-for="(item,index) in cardlist">
+        <div :class="['card-item', index != 1 ?  'filter' : '']" :key="index">
+          <div class="item-header">{{ item.title }}</div>
+          <div class="item-content">
+            <div class="item-content-left" @click="handleChoose(index)">
+              <van-image fit="cover" :src="item.imgLeftUrl" />
+              <div class="mask"></div>
+              <div class="tag">#{{item.leftName}}#</div>
+              <div class="vote" v-if="index == 1">
+                <div class="line nor">
+                  <div
+                    :class="['line-true', 'nor']"
+                    :style="{ height: toPercent(item).leftPrecent }"
+                  >
+                    <div class="percent">{{ toPercent(item).leftPrecent }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item-content-right" @click="handleChoose(index)">
+              <van-image fit="cover" :src="item.imgRightUrl" />
+              <div class="mask"></div>
+              <div class="tag">#{{item.rightName}}#</div>
+              <div class="vote" v-if="index == 1">
+                <div class="line active">
+                  <div
+                    :class="['line-true', 'active']"
+                    :style="{ height: toPercent(item).rightPrecent }"
+                  >
                     <div class="percent">{{ toPercent(item).rightPrecent }}</div>
                   </div>
                 </div>
@@ -45,7 +91,7 @@
           </div>
         </div>
       </template>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -53,6 +99,25 @@
 export default {
   data() {
     return {
+      swiperOption: {
+        notNextTick: true,
+        direction: 'vertical',
+        // slidesPerView: 3,
+        slidesPerView: 'auto',
+        // autoHeight: true,
+        // autoplay: {
+        //   // 自动播放
+        //   delay: 3000,
+        //   stopOnLastSlide: false,
+        //   disableOnInteraction: false
+        // },
+        // loop: true, // 循环
+        // directionType: 'horizontal', // 方向
+        observer: true, // 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
+        observeParents: true, // 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新。
+        setWrapperSize: true // Swiper使用flexbox布局(display: flex)，
+        // 开启这个设定会在Wrapper上添加等于slides相加的宽或高，在对flexbox布局的支持不是很好的浏览器中可能需要用到。
+      },
       cardlist: [
         {
           title: '谁才是真正的螺蛳粉之王？',
@@ -61,7 +126,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/01_luosifeng/right.jpg'),
           rightName: '螺霸王',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '好吃又健康的面包，你更喜欢哪种？',
@@ -70,7 +135,7 @@ export default {
           leftValue: 1,
           imgRightUrl: require('../../assets/images/2_miangbao/right.jpg'),
           rightName: '全麦黑麦面包',
-          rightValue: 2,
+          rightValue: 2
         },
         {
           title: '早餐喜欢吃哪种麦片？',
@@ -79,7 +144,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/3_maipian/right.jpg'),
           rightName: '桂格即食燕麦片',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '哪种爽辣零食最解压？',
@@ -88,7 +153,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/4_suangla/right.jpg'),
           rightName: '牛板筋',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '办公室下午茶喜欢吃哪种零食？',
@@ -97,7 +162,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/5_bangongshi/right.jpg'),
           rightName: '三只松鼠炭烧腰果',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '你觉得最经典的薯片是哪种？',
@@ -106,7 +171,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/6_zuijindiansupian/right.jpg'),
           rightName: '可比克薯片',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '你最喜欢哪种果肉干？',
@@ -115,7 +180,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/7_nizuixihuan/right.jpg'),
           rightName: '榴莲干',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '喜欢吃哪种饼干',
@@ -124,7 +189,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/8_binggang/right.jpg'),
           rightName: '奥利奥饼干',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '哪种牛奶更好喝？',
@@ -133,7 +198,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/9_niunai/right.jpg'),
           rightName: '旺仔牛奶',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '韩国网红方便面，喜欢吃哪个？',
@@ -142,7 +207,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/10_fanbianmian/right.jpg'),
           rightName: '三养火鸡面',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '哪个自热火锅最好吃？',
@@ -151,7 +216,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/11_zirehuoguo/right.jpg'),
           rightName: '小龙坎',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '网红速食好物，更喜欢吃哪个？',
@@ -161,7 +226,7 @@ export default {
 
           imgRightUrl: require('../../assets/images/12_wanghonsushi/right.jpg'),
           rightName: '顾大嫂拌面',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '哪种雪糕更好吃？',
@@ -170,7 +235,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/13_xuegao/right.jpg'),
           rightName: '梦龙',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '小时候吃的最多的童年零食是哪个？',
@@ -179,7 +244,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/14_tongnianlingshi/right.jpg'),
           rightName: '旺旺仙贝',
-          rightValue: 0,
+          rightValue: 0
         },
         {
           title: '哪种无糖饮料更好喝？',
@@ -188,7 +253,7 @@ export default {
           leftValue: 0,
           imgRightUrl: require('../../assets/images/15_wutangyingliao/right.jpg'),
           rightName: '零度无糖可乐',
-          rightValue: 0,
+          rightValue: 0
         }
         // {
         //   title: '浙江杭帮菜，你更爱哪个？',
@@ -203,35 +268,43 @@ export default {
 
   computed: {
     toPercent(item) {
-      return function(item){
+      return function(item) {
         // let total = item.leftValue + item.rightValue;
-        if (item.leftPrecent == 0 || ( item.leftPrecent + item.rightValue ) == 0){
+        if (item.leftPrecent == 0 || item.leftPrecent + item.rightValue == 0) {
           return {
             leftPrecent: 0 + '%',
             rightPrecent: 0 + '%'
-          };
+          }
         }
         return {
           // Math.round(num / total * 10000) / 100.00 + "%"
-          leftPrecent: Math.round(item.leftValue / (item.leftValue + item.rightValue) * 10000) / 100.00 + '%',
-          rightPrecent: Math.round(item.rightValue / (item.leftValue + item.rightValue) * 10000) / 100.00 + '%'
+          leftPrecent: Math.round((item.leftValue / (item.leftValue + item.rightValue)) * 10000) / 100.0 + '%',
+          rightPrecent: Math.round((item.rightValue / (item.leftValue + item.rightValue)) * 10000) / 100.0 + '%'
         }
       }
     }
   },
 
-  mounted() { },
+  mounted() {},
 
   methods: {
     handleChoose(index) {
-      console.log(index);
+      console.log(index)
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .index-container {
-  background: #F5F5F5;
+  background: #f5f5f5;
+  .swiper-container {
+    height: 100vh;
+    .swiper-slide {
+      height: 936px;
+      margin-bottom: 30px;
+    }
+  }
   .list {
     display: flex;
     justify-content: center;
@@ -244,7 +317,7 @@ export default {
     opacity: 1;
     border-radius: 8px;
     &.filter {
-      filter: blur(5px);
+      // filter: blur(5px);
     }
     .item-header {
       height: 50px;
@@ -269,7 +342,8 @@ export default {
       background: #000000;
       opacity: 0.31;
     }
-    .item-content-left, .item-content-right {
+    .item-content-left,
+    .item-content-right {
       position: relative;
       width: 344px;
       height: 697px;
@@ -292,10 +366,10 @@ export default {
           border-radius: 14px 14px 0px 0px;
           background: #000000;
           &.active {
-            background: #FF313A;
+            background: #ff313a;
           }
           &.nor {
-            background: #CACBCC;
+            background: #cacbcc;
           }
           .percent {
             position: absolute;
@@ -304,7 +378,7 @@ export default {
             font-family: DIN Alternate;
             font-weight: bold;
             line-height: 35px;
-            color: #FFFFFF;
+            color: #ffffff;
             opacity: 1;
             top: -55px;
             left: 50%;
@@ -319,14 +393,14 @@ export default {
         top: 105px;
         position: absolute;
         height: 38px;
-        background: #F1F2F3;
+        background: #f1f2f3;
         border-radius: 6px;
         line-height: 38px;
         border-radius: 6px;
         font-size: 20px;
         font-family: PingFang SC;
         font-weight: 400;
-        color: #151A30;
+        color: #151a30;
         padding: 0 10px;
       }
       .vote {
@@ -340,14 +414,14 @@ export default {
         top: 26px;
         position: absolute;
         height: 38px;
-        background: #F1F2F3;
+        background: #f1f2f3;
         border-radius: 6px;
         line-height: 38px;
         border-radius: 6px;
         font-size: 20px;
         font-family: PingFang SC;
         font-weight: 400;
-        color: #151A30;
+        color: #151a30;
         padding: 0 10px;
       }
       .vote {
@@ -368,13 +442,13 @@ export default {
       width: 183px;
       height: 64px;
       line-height: 64px;
-      border: 1px solid #FE6B50;
+      border: 1px solid #fe6b50;
       text-align: center;
       opacity: 1;
       border-radius: 45px;
       font-size: 24px;
       font-family: PingFangSC-Medium;
-      color: #FD6A52;
+      color: #fd6a52;
       opacity: 1;
     }
   }
