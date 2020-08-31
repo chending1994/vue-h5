@@ -10,14 +10,14 @@
         <div :class="['card-item', index != 1 ?  'filter' : '']" :key="index">
           <div class="item-header">{{ item.title }}</div>
           <div class="item-content">
-            <div class="item-content-left" @click="handleChoose(index)">
+            <div class="item-content-left" @click="handleChoose(index, 0)">
               <van-image fit="cover" :src="item.imgLeftUrl" />
               <div class="mask"></div>
               <div class="tag">#{{item.leftName}}#</div>
-              <div class="vote" v-if="index == 1">
+              <div class="vote" v-if="item.hasChoose">
                 <div class="line nor">
                   <div
-                    :class="['line-true', 'nor']"
+                    :class="['line-true', item.leftActive ? 'active' : 'nor']"
                     :style="{ height: toPercent(item).leftPrecent }"
                   >
                     <div class="percent">{{ toPercent(item).leftPrecent }}</div>
@@ -25,14 +25,14 @@
                 </div>
               </div>
             </div>
-            <div class="item-content-right" @click="handleChoose(index)">
+            <div class="item-content-right" @click="handleChoose(index, 1)">
               <van-image fit="cover" :src="item.imgRightUrl" />
               <div class="mask"></div>
               <div class="tag">#{{item.rightName}}#</div>
-              <div class="vote" v-if="index == 1">
+              <div class="vote" v-if="item.hasChoose">
                 <div class="line active">
                   <div
-                    :class="['line-true', 'active']"
+                    :class="['line-true', item.rightActive ? 'active' : 'nor']"
                     :style="{ height: toPercent(item).rightPrecent }"
                   >
                     <div class="percent">{{ toPercent(item).rightPrecent }}</div>
@@ -96,6 +96,8 @@
 </template>
 
 <script>
+import { behaviorRecord_like } from '@/api/user.js'
+
 export default {
   data() {
     return {
@@ -130,7 +132,10 @@ export default {
           rightName: '螺霸王',
           rightValue: 0,
           leftToken: '$O98mcdB03C7$',
-          rightToken: '$YcrDcdB0EXf$'
+          rightToken: '$YcrDcdB0EXf$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '好吃又健康的面包，你更喜欢哪种？',
@@ -141,7 +146,10 @@ export default {
           rightName: '全麦黑麦面包',
           rightValue: 2,
           leftToken: '$v2UNcdBc4LM$',
-          rightToken: '$BPJqcdBcqFq$'
+          rightToken: '$BPJqcdBcqFq$',
+          leftActive: false,
+          rightActive: true,
+          hasChoose: true
         },
         {
           title: '早餐喜欢吃哪种麦片？',
@@ -152,7 +160,10 @@ export default {
           rightName: '桂格即食燕麦片',
           rightValue: 0,
           leftToken: '$Iv2HcdBdDl5$',
-          rightToken: '$IWAfcdBWvMv$'
+          rightToken: '$IWAfcdBWvMv$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '哪种爽辣零食最解压？',
@@ -163,7 +174,10 @@ export default {
           rightName: '牛板筋',
           rightValue: 0,
           leftToken: '$JWQecdB3Rnd$',
-          rightToken: '$IJ7kcdz0bBz$'
+          rightToken: '$IJ7kcdz0bBz$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '办公室下午茶喜欢吃哪种零食？',
@@ -174,7 +188,10 @@ export default {
           rightName: '三只松鼠炭烧腰果',
           rightValue: 0,
           leftToken: '$GX1CcdBBVcx$',
-          rightToken: '$UNsHcdBAmSK$'
+          rightToken: '$UNsHcdBAmSK$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '你觉得最经典的薯片是哪种？',
@@ -185,7 +202,10 @@ export default {
           rightName: '可比克薯片',
           rightValue: 0,
           leftToken: '$XtdjcdBfPtR$',
-          rightToken: '$0MqvcdBgZJn$'
+          rightToken: '$0MqvcdBgZJn$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '你最喜欢哪种果肉干？',
@@ -196,7 +216,10 @@ export default {
           rightName: '榴莲干',
           rightValue: 0,
           leftToken: '$pbKvcdBgmvx$',
-          rightToken: '$2hoqcdBTqZP$'
+          rightToken: '$2hoqcdBTqZP$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '喜欢吃哪种饼干',
@@ -207,7 +230,10 @@ export default {
           rightName: '奥利奥饼干',
           rightValue: 0,
           leftToken: '$ppfPcdzYnqz$',
-          rightToken: '$J4Zacdz1MdK$'
+          rightToken: '$J4Zacdz1MdK$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '哪种牛奶更好喝？',
@@ -218,7 +244,10 @@ export default {
           rightName: '旺仔牛奶',
           rightValue: 0,
           leftToken: '$hL3zcdBIbaF$',
-          rightToken: '$Sja9cdBHeo4$'
+          rightToken: '$Sja9cdBHeo4$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '韩国网红方便面，喜欢吃哪个？',
@@ -229,7 +258,10 @@ export default {
           rightName: '三养火鸡面',
           rightValue: 0,
           leftToken: '$DKW4cdBhRpN$',
-          rightToken: '$2ahHcdBhksB$'
+          rightToken: '$2ahHcdBhksB$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '哪个自热火锅最好吃？',
@@ -240,7 +272,10 @@ export default {
           rightName: '小龙坎',
           rightValue: 0,
           leftToken: '$AHqtcdBi0ry$',
-          rightToken: '$3PmdcdBiYKs$'
+          rightToken: '$3PmdcdBiYKs$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '网红速食好物，更喜欢吃哪个？',
@@ -251,7 +286,10 @@ export default {
           rightName: '顾大嫂拌面',
           rightValue: 0,
           leftToken: '$vz52cdBjKnL$',
-          rightToken: '$YcrDcdB0EXf$'
+          rightToken: '$YcrDcdB0EXf$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '哪种雪糕更好吃？',
@@ -262,7 +300,10 @@ export default {
           rightName: '梦龙',
           rightValue: 0,
           leftToken: '$MWLicdzTpq9$',
-          rightToken: '$A9VicdzhOnD$'
+          rightToken: '$A9VicdzhOnD$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '小时候吃的最多的童年零食是哪个？',
@@ -273,7 +314,10 @@ export default {
           rightName: '旺旺仙贝',
           rightValue: 0,
           leftToken: '$IqxxcdBksCG$',
-          rightToken: '$DR1AcdBP1LW$'
+          rightToken: '$DR1AcdBP1LW$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '哪种无糖饮料更好喝？',
@@ -284,7 +328,10 @@ export default {
           rightName: '零度无糖可乐',
           rightValue: 0,
           leftToken: '$ufgPcdBNia9$',
-          rightToken: '$tcPScdBr5Vq$'
+          rightToken: '$tcPScdBr5Vq$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
         }
         // {
         //   title: '浙江杭帮菜，你更爱哪个？',
@@ -293,7 +340,7 @@ export default {
         //   imgRightUrl: require('../../assets/images/img02.png'),
         //   rightName: '222',
         // }
-      ]
+      ],
     }
   },
 
@@ -319,8 +366,39 @@ export default {
   mounted() {},
 
   methods: {
-    handleChoose(index) {
-      console.log(index)
+    async handleChoose(index, type) {
+      console.log(index);
+      if(!this.cardlist[index].hasChoose) {
+        if(type == 0) {
+          this.cardlist[index].leftActive = true;
+          this.cardlist[index].leftValue++;
+        }
+        if(type == 1) {
+          this.cardlist[index].rightActive = true;
+          this.cardlist[index].rightValue++;
+        }
+        let pageName = type == 0 ? this.cardlist[index].leftName : this.cardlist[index].rightName;
+        // this.cardlist.findIndex((item,index) => {
+        // })
+        const data = await behaviorRecord_like({
+          active: 'like',
+          typeId: 5,
+          page: pageName,
+          userId: 1111
+        });
+        console.log(data);
+        this.$toast({
+          message: '投票成功',
+          icon: 'passed',
+        });
+        this.cardlist[index].hasChoose = true;
+      } else {
+        this.$toast({
+          message: '已投票',
+          icon: 'fail',
+        });
+      }
+      
     },
     onCopy(e) {
       console.log(e);

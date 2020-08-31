@@ -1,9 +1,11 @@
 import api from './index'
+import qs from 'qs'
 // axios
 import request from '@/utils/request'
 
 // 登录
 export function login(data) {
+  // https://support.miniprogramhacker.cn/test/rest/behaviorRecord/insert
   return request({
     url: api.Login,
     method: 'post',
@@ -28,5 +30,18 @@ export function getUserName(params) {
     method: 'get',
     params,
     hideloading: true
+  })
+}
+
+
+export function behaviorRecord_like(data) {
+  return request({
+    url: 'api/test/rest/behaviorRecord/insert',
+    method: 'post',
+    headers:{
+      'content-type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify(data)
+    // baseURL: 'https://support.miniprogramhacker.cn/test/rest/'
   })
 }
