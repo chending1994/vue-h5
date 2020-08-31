@@ -36,7 +36,7 @@ export function getUserName(params) {
 
 export function behaviorRecord_like(data) {
   return request({
-    url: 'api/test/rest/behaviorRecord/insert',
+    url: 'test/rest/behaviorRecord/insert',
     method: 'post',
     headers:{
       'content-type': 'application/x-www-form-urlencoded'
