@@ -323,8 +323,8 @@ export default {
       console.log(index)
     },
     onCopy(e) {
-      window.location.href = 'taobao://';
       console.log(e);
+      window.location.href = 'taobao://';
     },
     onError(e) {
       console.log(e);
