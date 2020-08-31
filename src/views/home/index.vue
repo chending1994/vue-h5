@@ -323,8 +323,8 @@ export default {
       console.log(index)
     },
     onCopy(e) {
-      Toast.success('复制成功');
       window.location.href = 'taobao://';
+      console.log(e);
     },
     onError(e) {
       console.log(e);
