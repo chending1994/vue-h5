@@ -7,7 +7,7 @@
           v-for="(item, index) in cardlist"
           :key="index"
         >
-        <div :class="['card-item', index != 1 ?  'filter' : '']" :key="index">
+        <div :class="['card-item', index != currentIndex ?  'filter' : '']" :key="index">
           <div class="item-header">{{ item.title }}</div>
           <div class="item-content">
             <div class="item-content-left" @click="handleChoose(index, 0)">
@@ -42,65 +42,27 @@
             </div>
           </div>
           <div class="item-footer">
-            <div class="footer-btn"  v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
-            <div class="footer-btn"  v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
+            <div class="footer-btn" @click="handleBuy(item, 0)" v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
+            <div class="footer-btn" @click="handleBuy(item, 1)" v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
           </div>
         </div>
         </swiper-slide>
       </swiper>
     </div>
-    <!-- <div class="list">
-      <template v-for="(item,index) in cardlist">
-        <div :class="['card-item', index != 1 ?  'filter' : '']" :key="index">
-          <div class="item-header">{{ item.title }}</div>
-          <div class="item-content">
-            <div class="item-content-left" @click="handleChoose(index)">
-              <van-image fit="cover" :src="item.imgLeftUrl" />
-              <div class="mask"></div>
-              <div class="tag">#{{item.leftName}}#</div>
-              <div class="vote" v-if="index == 1">
-                <div class="line nor">
-                  <div
-                    :class="['line-true', 'nor']"
-                    :style="{ height: toPercent(item).leftPrecent }"
-                  >
-                    <div class="percent">{{ toPercent(item).leftPrecent }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item-content-right" @click="handleChoose(index)">
-              <van-image fit="cover" :src="item.imgRightUrl" />
-              <div class="mask"></div>
-              <div class="tag">#{{item.rightName}}#</div>
-              <div class="vote" v-if="index == 1">
-                <div class="line active">
-                  <div
-                    :class="['line-true', 'active']"
-                    :style="{ height: toPercent(item).rightPrecent }"
-                  >
-                    <div class="percent">{{ toPercent(item).rightPrecent }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="item-footer">
-            <div class="footer-btn">去购买</div>
-            <div class="footer-btn">去购买</div>
-          </div>
-        </div>
-      </template>
-    </div> -->
   </div>
 </template>
 
 <script>
 import { behaviorRecord_like } from '@/api/user.js'
+import { behaviorRecord_gotoBuy } from '@/api/user.js'
 
 export default {
   data() {
+    let that = this;
     return {
+      currentIndex:1,
+      userId: null,
+
       swiperOption: {
         notNextTick: true,
         direction: 'vertical',
@@ -119,20 +81,41 @@ export default {
         // directionType: 'horizontal', // 方向
         observer: true, // 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
         observeParents: true, // 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新。
-        setWrapperSize: true // Swiper使用flexbox布局(display: flex)，
+        setWrapperSize: true, // Swiper使用flexbox布局(display: flex)，
         // 开启这个设定会在Wrapper上添加等于slides相加的宽或高，在对flexbox布局的支持不是很好的浏览器中可能需要用到。
+        
+        pagination: {
+          el: '.swiper-pagination',
+          type: 'fraction',//分式指示器  
+        },
+        initialSlide: 1,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        on:{
+          slideChange:function(){
+            that.currentIndex = this.realIndex;
+            // if(this.currentIndex != this.realIndex){
+            //   this.currentIndex = this.realIndex
+            // }
+            // console.log(this.realIndex)
+          }
+        }
+
       },
+      
       cardlist: [
         {
           title: '谁才是真正的螺蛳粉之王？',
-          imgLeftUrl: require('../../assets/images/01_luosifeng/left.jpg'),
+          imgLeftUrl: require('../../assets/images/1_luosifeng/left.jpg'),
           leftName: '好欢螺',
-          leftValue: 0,
-          imgRightUrl: require('../../assets/images/01_luosifeng/right.jpg'),
+          leftValue: 100,
+          imgRightUrl: require('../../assets/images/1_luosifeng/right.jpg'),
           rightName: '螺霸王',
-          rightValue: 0,
-          leftToken: '$O98mcdB03C7$',
-          rightToken: '$YcrDcdB0EXf$',
+          rightValue: 100,
+          leftToken: '$Tv7KcWc4EsQ$',
+          rightToken: '$UnjDcWTRwDy$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -140,27 +123,27 @@ export default {
         {
           title: '好吃又健康的面包，你更喜欢哪种？',
           imgLeftUrl: require('../../assets/images/2_miangbao/left.jpg'),
-          leftName: '紫米夹心面包',
-          leftValue: 1,
+          leftName: '奶香手撕面包',
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/2_miangbao/right.jpg'),
-          rightName: '全麦黑麦面包',
-          rightValue: 2,
-          leftToken: '$v2UNcdBc4LM$',
-          rightToken: '$BPJqcdBcqFq$',
+          rightName: '海盐芝士蒸蛋糕',
+          rightValue: 100,
+          leftToken: '$FP32cW0XCJx$',
+          rightToken: '$wCDXcWgIrYw$',
           leftActive: false,
-          rightActive: true,
-          hasChoose: true
+          rightActive: false,
+          hasChoose: false
         },
         {
           title: '早餐喜欢吃哪种麦片？',
           imgLeftUrl: require('../../assets/images/3_maipian/left.jpg'),
           leftName: '西麦燕麦片',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/3_maipian/right.jpg'),
           rightName: '桂格即食燕麦片',
-          rightValue: 0,
-          leftToken: '$Iv2HcdBdDl5$',
-          rightToken: '$IWAfcdBWvMv$',
+          rightValue: 100,
+          leftToken: '$Lu5HcWTjCDE$',
+          rightToken: '$h8o3cWTQ63W$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -169,12 +152,12 @@ export default {
           title: '哪种爽辣零食最解压？',
           imgLeftUrl: require('../../assets/images/4_suangla/left.jpg'),
           leftName: '卫龙大面筋面条',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/4_suangla/right.jpg'),
           rightName: '牛板筋',
-          rightValue: 0,
-          leftToken: '$JWQecdB3Rnd$',
-          rightToken: '$IJ7kcdz0bBz$',
+          rightValue: 100,
+          leftToken: '$YAFfcWTQeys$',
+          rightToken: '$4ENUcdtoSc1$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -183,12 +166,12 @@ export default {
           title: '办公室下午茶喜欢吃哪种零食？',
           imgLeftUrl: require('../../assets/images/5_bangongshi/left.jpg'),
           leftName: '良品铺子猪肉脯',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/5_bangongshi/right.jpg'),
           rightName: '三只松鼠炭烧腰果',
-          rightValue: 0,
-          leftToken: '$GX1CcdBBVcx$',
-          rightToken: '$UNsHcdBAmSK$',
+          rightValue: 100,
+          leftToken: '$OlKncWT9aYU$',
+          rightToken: '$u1HGcWTk44f$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -197,12 +180,12 @@ export default {
           title: '你觉得最经典的薯片是哪种？',
           imgLeftUrl: require('../../assets/images/6_zuijindiansupian/left.jpg'),
           leftName: '乐事薯片',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/6_zuijindiansupian/right.jpg'),
           rightName: '可比克薯片',
-          rightValue: 0,
-          leftToken: '$XtdjcdBfPtR$',
-          rightToken: '$0MqvcdBgZJn$',
+          rightValue: 100,
+          leftToken: '$lqAacWTQrt2$',
+          rightToken: '$sTPXcWT9ZZm$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -211,12 +194,12 @@ export default {
           title: '你最喜欢哪种果肉干？',
           imgLeftUrl: require('../../assets/images/7_nizuixihuan/left.jpg'),
           leftName: '芒果干',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/7_nizuixihuan/right.jpg'),
           rightName: '榴莲干',
-          rightValue: 0,
-          leftToken: '$pbKvcdBgmvx$',
-          rightToken: '$2hoqcdBTqZP$',
+          rightValue: 100,
+          leftToken: '$QN77cWTkyRD$',
+          rightToken: '$vkuwcWTPxif$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -225,12 +208,12 @@ export default {
           title: '喜欢吃哪种饼干',
           imgLeftUrl: require('../../assets/images/8_binggang/left.jpg'),
           leftName: '芝士威化饼干',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/8_binggang/right.jpg'),
           rightName: '奥利奥饼干',
-          rightValue: 0,
-          leftToken: '$ppfPcdzYnqz$',
-          rightToken: '$J4Zacdz1MdK$',
+          rightValue: 100,
+          leftToken: '$itSJcWTkr9M$',
+          rightToken: '$cOsxcWTkgyx$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -239,12 +222,12 @@ export default {
           title: '哪种牛奶更好喝？',
           imgLeftUrl: require('../../assets/images/9_niunai/left.jpg'),
           leftName: '蒙牛真果粒',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/9_niunai/right.jpg'),
           rightName: '旺仔牛奶',
-          rightValue: 0,
-          leftToken: '$hL3zcdBIbaF$',
-          rightToken: '$Sja9cdBHeo4$',
+          rightValue: 100,
+          leftToken: '$xelEcWTljAR$',
+          rightToken: '$LOoOcWTO3JQ$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -253,12 +236,12 @@ export default {
           title: '韩国网红方便面，喜欢吃哪个？',
           imgLeftUrl: require('../../assets/images/10_fanbianmian/left.jpg'),
           leftName: '农心辛拉面',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/10_fanbianmian/right.jpg'),
           rightName: '三养火鸡面',
-          rightValue: 0,
-          leftToken: '$DKW4cdBhRpN$',
-          rightToken: '$2ahHcdBhksB$',
+          rightValue: 100,
+          leftToken: '$oUbYcWTPEt9$',
+          rightToken: '$X6zRcWTP88R$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -267,12 +250,12 @@ export default {
           title: '哪个自热火锅最好吃？',
           imgLeftUrl: require('../../assets/images/11_zirehuoguo/left.jpg'),
           leftName: '海底捞',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/11_zirehuoguo/right.jpg'),
           rightName: '小龙坎',
-          rightValue: 0,
-          leftToken: '$AHqtcdBi0ry$',
-          rightToken: '$3PmdcdBiYKs$',
+          rightValue: 100,
+          leftToken: '$gupxcWTlHXQ$',
+          rightToken: '$LoKUcWTOJ0W$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -281,12 +264,12 @@ export default {
           title: '网红速食好物，更喜欢吃哪个？',
           imgLeftUrl: require('../../assets/images/12_wanghonsushi/left.jpg'),
           leftName: '阿宽红油面皮',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/12_wanghonsushi/right.jpg'),
           rightName: '顾大嫂拌面',
-          rightValue: 0,
-          leftToken: '$vz52cdBjKnL$',
-          rightToken: '$YcrDcdB0EXf$',
+          rightValue: 100,
+          leftToken: '$He7TcWTOch9$',
+          rightToken: '$XsUkcWTOs2O$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -295,12 +278,12 @@ export default {
           title: '哪种雪糕更好吃？',
           imgLeftUrl: require('../../assets/images/13_xuegao/left.jpg'),
           leftName: '八喜',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/13_xuegao/right.jpg'),
           rightName: '梦龙',
-          rightValue: 0,
-          leftToken: '$MWLicdzTpq9$',
-          rightToken: '$A9VicdzhOnD$',
+          rightValue: 100,
+          leftToken: '$arpMcWTOMCX$',
+          rightToken: '$qinWcWTm2XC$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -309,12 +292,12 @@ export default {
           title: '小时候吃的最多的童年零食是哪个？',
           imgLeftUrl: require('../../assets/images/14_tongnianlingshi/left.jpg'),
           leftName: '咪咪',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/14_tongnianlingshi/right.jpg'),
           rightName: '旺旺仙贝',
-          rightValue: 0,
-          leftToken: '$IqxxcdBksCG$',
-          rightToken: '$DR1AcdBP1LW$',
+          rightValue: 100,
+          leftToken: '$vSYVcWTmgVh$',
+          rightToken: '$xoXYcWTmFMH$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
@@ -323,23 +306,16 @@ export default {
           title: '哪种无糖饮料更好喝？',
           imgLeftUrl: require('../../assets/images/15_wutangyingliao/left.jpg'),
           leftName: '元气森林气泡水',
-          leftValue: 0,
+          leftValue: 100,
           imgRightUrl: require('../../assets/images/15_wutangyingliao/right.jpg'),
           rightName: '零度无糖可乐',
-          rightValue: 0,
-          leftToken: '$ufgPcdBNia9$',
-          rightToken: '$tcPScdBr5Vq$',
+          rightValue: 100,
+          leftToken: '$9wWrcWTm2AH$',
+          rightToken: '$vs9bcWTNJMN$',
           leftActive: false,
           rightActive: false,
           hasChoose: false
         }
-        // {
-        //   title: '浙江杭帮菜，你更爱哪个？',
-        //   imgLeftUrl: require('../../assets/images/img01.png'),
-        //   leftName: '1111',
-        //   imgRightUrl: require('../../assets/images/img02.png'),
-        //   rightName: '222',
-        // }
       ],
     }
   },
@@ -363,7 +339,13 @@ export default {
     }
   },
 
-  mounted() {},
+  mounted() {
+    let ip = localStorage.getItem('Ip');
+    // let reg = new RegExp('.', 'g');
+    let numIp = ip.replace(/\./g, '');
+    this.userId = numIp.substring(numIp.length-9); // 取后9位作为userId
+    console.log(this.userId);
+  },
 
   methods: {
     async handleChoose(index, type) {
@@ -384,13 +366,20 @@ export default {
           active: 'like',
           typeId: 5,
           page: pageName,
-          userId: 1111
+          userId: parseInt(this.userId)
         });
         console.log(data);
-        this.$toast({
-          message: '投票成功',
-          icon: 'passed',
-        });
+        if(data.code == 1) {
+          this.$toast({
+            message: '投票成功',
+            icon: 'passed',
+          });
+        } else {
+          this.$toast({
+            message: data.msg,
+            icon: 'fail',
+          });
+        }
         this.cardlist[index].hasChoose = true;
       } else {
         this.$toast({
@@ -400,13 +389,30 @@ export default {
       }
       
     },
-    onCopy(e) {
-      console.log(e);
+    async onCopy(e) {
+      // const data2 = await behaviorRecord_gotoBuy({
+      //   typeId: 6,
+      //   page: e.text,
+      //   userId: 1111
+      // });
       window.location.href = 'taobao://';
+      // 
+    },
+    async handleBuy(item, type) {
+      let pageName = type == 0 ? item.leftName : item.rightName;
+      const data = await behaviorRecord_gotoBuy({
+        active: 'gotoBuy',
+        typeId: 6,
+        page: pageName,
+        userId: parseInt(this.userId)
+      });
     },
     onError(e) {
       console.log(e);
     },
+    reload(index){
+      this.currentIndex = index;
+    }
   }
 }
 </script>
@@ -433,7 +439,7 @@ export default {
     opacity: 1;
     border-radius: 8px;
     &.filter {
-      // filter: blur(5px);
+      filter: blur(5px);
     }
     .item-header {
       height: 50px;

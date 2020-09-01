@@ -23,16 +23,22 @@ export function getUserInfo(data) {
   })
 }
 
+// let params = {typeId:5};
+// params['userId'] = '12323';
+// params['page'] = '投票项标签';
+
 // 用户名称 get 方法
-export function getUserName(params) {
+export function behaviorRecord_gotoBuy(data) {
   return request({
-    url: api.UserName,
-    method: 'get',
-    params,
-    hideloading: true
+    url: 'test/rest/behaviorRecord/insert',
+    method: 'post',
+    headers:{
+      'content-type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify(data)
+    // baseApi: 'https://support.miniprogramhacker.cn/test/rest/'
   })
 }
-
 
 export function behaviorRecord_like(data) {
   return request({
