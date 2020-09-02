@@ -10,7 +10,14 @@
       <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
       <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
 	  <% } %> -->
-    <title><%= webpackConfig.name %></title>
+    <title>详情</title>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <script type="text/javascript">
+      var Ip=returnCitySN['cip']
+      var cityname=returnCitySN['cname']
+      localStorage.setItem('Ip', Ip)
+      localStorage.setItem('cityname', cityname)
+    </script>
   </head>
   <body>
     <noscript>

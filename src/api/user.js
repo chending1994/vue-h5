@@ -35,7 +35,8 @@ export function behaviorRecord_gotoBuy(data) {
     headers:{
       'content-type': 'application/x-www-form-urlencoded'
     },
-    data: qs.stringify(data)
+    data: qs.stringify(data),
+    hideloading: false
     // baseApi: 'https://support.miniprogramhacker.cn/test/rest/'
   })
 }
@@ -47,7 +48,8 @@ export function behaviorRecord_like(data) {
     headers:{
       'content-type': 'application/x-www-form-urlencoded'
     },
-    data: qs.stringify(data)
+    data: qs.stringify(data),
+    hideloading: false
     // baseURL: 'https://support.miniprogramhacker.cn/test/rest/'
   })
 }
