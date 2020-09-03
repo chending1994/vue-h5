@@ -1,4 +1,6 @@
 .DS_Store
+.git
+.github
 node_modules
 /dist
 /docs

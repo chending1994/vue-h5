@@ -12,7 +12,7 @@
           <div class="item-header">{{ item.title }}</div>
           <div class="item-content">
             <div class="item-content-left" @click="handleChoose(index, 0)">
-              <van-image fit="cover" :src="item.imgLeftUrl" />
+              <van-image fit="cover" :src="item.leftImage" />
               <div :class="item.leftActive||item.rightActive?'mask2':'mask'"></div>
               <div class="tag">#{{item.leftName}}#</div>
               <div class="vote" v-if="item.hasChoose">
@@ -27,7 +27,7 @@
               </div>
             </div>
             <div class="item-content-right" @click="handleChoose(index, 1)">
-              <van-image fit="cover" :src="item.imgRightUrl" />
+              <van-image fit="cover" :src="item.rightImage" />
               <div :class="item.leftActive||item.rightActive?'mask2':'mask'"></div>
               <div class="tag">#{{item.rightName}}#</div>
               <div class="vote" v-if="item.hasChoose">
@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import { behaviorRecord_like } from '@/api/user.js'
-import { behaviorRecord_gotoBuy } from '@/api/user.js'
+import { behaviorRecord_like, getSubfieldPageList, behaviorRecord_gotoBuy } from '@/api/user.js'
+// import { behaviorRecord_gotoBuy } from '@/api/user.js'
 
 export default {
   data() {
@@ -106,48 +106,48 @@ export default {
       },
       
       cardlist: [
-        {
-          title: '谁才是真正的螺蛳粉之王？',
-          imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/a34fcd06283d414cdbde8593b65cd815',
-          leftName: '好欢螺',
-          leftValue: 100,
-          imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/934f4f1bf573386c9d05c447d07dee9b',
-          rightName: '螺霸王',
-          rightValue: 100,
-          leftToken: '$Tv7KcWc4EsQ$',
-          rightToken: '$UnjDcWTRwDy$',
-          leftActive: false,
-          rightActive: false,
-          hasChoose: false
-        },
-        {
-          title: '好吃又健康的面包，你更喜欢哪种？',
-          imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/43c2c00b30b548afc3df1aa132bd38fd',
-          leftName: '奶香手撕面包',
-          leftValue: 100,
-          imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/7b528dda3e354cb8ac8948f061f1c29b',
-          rightName: '海盐芝士蒸蛋糕',
-          rightValue: 100,
-          leftToken: '$0vN3cWGfbZJ$',
-          rightToken: '$wCDXcWgIrYw$',
-          leftActive: false,
-          rightActive: false,
-          hasChoose: false
-        },
-        {
-          title: '早餐喜欢吃哪种麦片？',
-          imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/7e89367ce3cf59ee3bad613d9e427203',
-          leftName: '西麦燕麦片',
-          leftValue: 100,
-          imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/166fc2cd2959256314c3aa6149b1324e',
-          rightName: '桂格即食燕麦片',
-          rightValue: 100,
-          leftToken: '$Lu5HcWTjCDE$',
-          rightToken: '$dUKzcWGhhZt$',
-          leftActive: false,
-          rightActive: false,
-          hasChoose: false
-        },
+        // {
+        //   title: '谁才是真正的螺蛳粉之王？',
+        //   imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/a34fcd06283d414cdbde8593b65cd815',
+        //   leftName: '好欢螺',
+        //   leftValue: 100,
+        //   imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/934f4f1bf573386c9d05c447d07dee9b',
+        //   rightName: '螺霸王',
+        //   rightValue: 100,
+        //   leftToken: '$Tv7KcWc4EsQ$',
+        //   rightToken: '$UnjDcWTRwDy$',
+        //   leftActive: false,
+        //   rightActive: false,
+        //   hasChoose: false
+        // },
+        // {
+        //   title: '好吃又健康的面包，你更喜欢哪种？',
+        //   imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/43c2c00b30b548afc3df1aa132bd38fd',
+        //   leftName: '奶香手撕面包',
+        //   leftValue: 100,
+        //   imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/7b528dda3e354cb8ac8948f061f1c29b',
+        //   rightName: '海盐芝士蒸蛋糕',
+        //   rightValue: 100,
+        //   leftToken: '$0vN3cWGfbZJ$',
+        //   rightToken: '$wCDXcWgIrYw$',
+        //   leftActive: false,
+        //   rightActive: false,
+        //   hasChoose: false
+        // },
+        // {
+        //   title: '早餐喜欢吃哪种麦片？',
+        //   imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/7e89367ce3cf59ee3bad613d9e427203',
+        //   leftName: '西麦燕麦片',
+        //   leftValue: 100,
+        //   imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/166fc2cd2959256314c3aa6149b1324e',
+        //   rightName: '桂格即食燕麦片',
+        //   rightValue: 100,
+        //   leftToken: '$Lu5HcWTjCDE$',
+        //   rightToken: '$dUKzcWGhhZt$',
+        //   leftActive: false,
+        //   rightActive: false,
+        //   hasChoose: false
+        // },
       ],
     }
   },
@@ -171,15 +171,16 @@ export default {
     }
   },
 
+  created() {
+    this.loadSubfieldPageList();
+  },
+
   mounted() {
     let ip = localStorage.getItem('Ip');
     // let reg = new RegExp('.', 'g');
     let numIp = ip.replace(/\./g, '');
     this.userId = numIp.substring(numIp.length-9); // 取后9位作为userId
     console.log(this.userId);
-  },
-  created(){
-
   },
 
   methods: {
@@ -260,11 +261,22 @@ export default {
     },
     getRandomInt(min, max) {
         // 以下函数返回 min（包含）～ max（包含）之间的数字：
-       this.data = Math.floor(Math.random() * (max - min + 1)) + min
+      this.data = Math.floor(Math.random() * (max - min + 1)) + min
       return this.data
       //  函数返回 min（包含）～ max（不包含）之间的数字
       //  this.data = Math.floor(Math.random() * (max - min) ) + min;
-      },
+    },
+    async loadSubfieldPageList() {
+      const data = await getSubfieldPageList();
+      if(data.code == 1) {
+        this.cardlist = data.data;
+      } else {
+        this.$toast({
+          message: data.msg,
+          icon: 'fail',
+        });
+      }
+    }
   }
 }
 </script>

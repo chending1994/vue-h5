@@ -53,3 +53,16 @@ export function behaviorRecord_like(data) {
     // baseURL: 'https://support.miniprogramhacker.cn/test/rest/'
   })
 }
+
+export function getSubfieldPageList(params) {
+  return request({
+    url: 'test/rest/subfield/pageList',
+    method: 'get',
+    headers:{
+      'content-type': 'application/x-www-form-urlencoded'
+    },
+    params,
+    hideloading: true
+    // baseURL: 'https://support.miniprogramhacker.cn/test/rest/'
+  })
+}
