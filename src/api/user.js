@@ -36,7 +36,7 @@ export function behaviorRecord_gotoBuy(data) {
       'content-type': 'application/x-www-form-urlencoded'
     },
     data: qs.stringify(data),
-    hideloading: false
+    hideloading: true
     // baseApi: 'https://support.miniprogramhacker.cn/test/rest/'
   })
 }
@@ -49,7 +49,7 @@ export function behaviorRecord_like(data) {
       'content-type': 'application/x-www-form-urlencoded'
     },
     data: qs.stringify(data),
-    hideloading: false
+    hideloading: true
     // baseURL: 'https://support.miniprogramhacker.cn/test/rest/'
   })
 }

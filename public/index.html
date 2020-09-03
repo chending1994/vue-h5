@@ -10,8 +10,8 @@
       <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
       <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
 	  <% } %> -->
-    <title>详情</title>
-    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <title>支支PK</title>
+    <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script type="text/javascript">
       var Ip=returnCitySN['cip']
       var cityname=returnCitySN['cname']
@@ -23,12 +23,21 @@
     <noscript>
       <strong>We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app">
+      <div sytle="display:none"> 
+        <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1279240582'%3E%3C/span%3E%3Cscript src='https://s4.cnzz.com/z_stat.php%3Fid%3D1279240582%26online%3D1' type='text/javascript'%3E%3C/script%3E"));</script>
+      </div> 
+    </div>
+    
     <!-- 使用CDN加速的JS文件，配置在vue.config.js下 -->
     <!-- <% for (var i in
       htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
       <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
     <% } %> -->
     <!-- built files will be auto injected -->
+    <!-- <div sytle="display:none"> 
+      <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1279240582'%3E%3C/span%3E%3Cscript src='https://s4.cnzz.com/z_stat.php%3Fid%3D1279240582%26online%3D1' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div> -->
+
   </body>
 </html>
