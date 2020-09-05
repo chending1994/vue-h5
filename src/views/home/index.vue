@@ -51,8 +51,21 @@
       </swiper>
     </div>
 
-    <div v-if="isShow" class="arrow">
+    <div v-show="isShow" class="arrow">
       <van-image fit="cover" :src="imgArrow" />
+    </div>
+
+    <div v-show="isShow" class="top_arrow">
+      <div class="title">下滑查看更多精彩内容</div>
+      <div class="img">
+        <van-image width="66" :src="downArrow" alt="" srcset=""></van-image>
+      </div>
+    </div>
+    <div v-show="isShow" class="down_arrow">
+      <div class="title">上滑查看更多精彩内容</div>
+      <div class="img">
+        <van-image width="66" :src="topArrow" alt="" srcset=""></van-image>
+      </div>
     </div>
 
     
@@ -113,6 +126,8 @@ export default {
         }
       },
       imgArrow: require('../../assets/images/arrow.png'),
+      topArrow: require('../../assets/images/top_arrow.png'),
+      downArrow: require('../../assets/images/down_arrow.png'),
       cardlist: [
         // {
         //   title: '谁才是真正的螺蛳粉之王？',
@@ -483,6 +498,32 @@ export default {
     z-index: 1;
     animation: 1.5s ease-in alternate infinite rocket;
   }
+
+  .top_arrow, .down_arrow {
+    width: 240px;
+    position: absolute;
+    left:calc(50% - 120px);
+    text-align: center;
+    animation: 1.5s ease-in alternate infinite arrow;
+    .title {
+      font-weight: 500;
+      color: #000000;
+    }
+  }
+  .top_arrow {
+    top: 30px;
+    z-index: 1;
+    .title {
+      margin-bottom: 10px;
+    }
+  }
+  .down_arrow {
+    bottom: 30px;
+    z-index: 1;
+    .title {
+      margin-bottom: 10px;
+    }
+  }
 }
 
 @keyframes rocket {
@@ -491,8 +532,18 @@ export default {
     transform: translateY(0px);
   }
   100% {
-    -webkit-transform: translateY(100px);
+    -webkit-transform: translateY(-300);
     transform: translateY(-300px);
+  }
+}
+@keyframes arrow {
+  0% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  100% {
+    -webkit-transform: translateY(-20px);
+    transform: translateY(-20px);
   }
 }
 </style>
