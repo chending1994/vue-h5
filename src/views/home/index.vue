@@ -1,6 +1,6 @@
 <!-- home -->
 <template>
-  <div class="index-container">
+  <div class="index-container" @touchstart="isDo(true)">
     
     <div class="swiper-box list">
       <swiper class="box-container" :options="swiperOption" ref="mySwiper">
@@ -50,6 +50,12 @@
         </swiper-slide>
       </swiper>
     </div>
+
+    <div v-if="isShow" class="arrow">
+      <van-image fit="cover" :src="imgArrow" />
+    </div>
+
+    
   </div>
 </template>
 
@@ -106,7 +112,7 @@ export default {
           }
         }
       },
-      
+      imgArrow: require('../../assets/images/arrow.png'),
       cardlist: [
         // {
         //   title: '谁才是真正的螺蛳粉之王？',
@@ -123,6 +129,12 @@ export default {
         //   hasChoose: false
         // }
       ],
+
+      lastTime: null, //最后一次点击的时间
+      currentTime: null, //当前点击的时间
+      timeOut: 5 * 1000, //设置超时时间：
+      isShow: false,
+      timeOutEvent: 0
     }
   },
 
@@ -146,6 +158,8 @@ export default {
   },
 
   created() {
+    this.lastTime = new Date().getTime();
+    this.isDo(false);
     this.loadSubfieldPageList();
   },
   destroyed: function () {
@@ -161,11 +175,9 @@ export default {
     this.userId = numIp.substring(numIp.length-9); // 取后9位作为userId
     this.userId = this.getRandomInt(1,2147483640)
     this.toEnter();
-    console.log(this.userId);
   },
 
   
-
   methods: {
     getTime(){
       setInterval(()=>{
@@ -173,6 +185,25 @@ export default {
         //toLocaleString() 方法可根据本地时间把 Date 对象转换为字符串，并返回结果。
         this.nowtime = new Date().toLocaleString();
       },1000)
+    },
+
+    isDo(flag) {
+      if(flag) {
+        this.isShow = false;
+      }
+      if(!this.isShow) {
+        clearTimeout(this.timeOutEvent);
+        this.timeOutEvent = setTimeout(() => {
+          this.isShow = true;
+        }, this.timeOut);
+      }
+
+      this.currentTime = new Date().getTime(); //记录这次点击的时间
+      // if((this.currentTime - this.lastTime) > this.timeOut && this.isShow) {  //判断上次最后一次点击的时间和这次点击的时间间隔是否大于设置时间
+      // } else {
+      //   this.isShow = false;
+      //   this.lastTime = new Date().getTime(); //如果在设置内点击，则把这次点击的时间记录覆盖掉之前存的最后一次点击的时间
+      // }
     },
     
 
@@ -276,6 +307,7 @@ export default {
 
 <style lang="scss" scoped>
 .index-container {
+  position: relative;
   background: #f5f5f5;
   .swiper-container {
     height: 100vh;
@@ -438,6 +470,29 @@ export default {
       color: #fd6a52;
       opacity: 1;
     }
+  }
+  .arrow {
+    transition: 0.3s;
+    width: 200px;
+    height: 200px;
+    font-size: 0;
+    position: absolute;
+    top: calc(50% - 100px);
+    // top: 0;
+    left: calc(50% - 100px);
+    z-index: 1;
+    animation: 1.5s ease-in alternate infinite rocket;
+  }
+}
+
+@keyframes rocket {
+  0% {
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  100% {
+    -webkit-transform: translateY(100px);
+    transform: translateY(-300px);
   }
 }
 </style>
