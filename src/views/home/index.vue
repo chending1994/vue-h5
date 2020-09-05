@@ -54,8 +54,9 @@
 </template>
 
 <script>
+
+
 import { behaviorRecord_like, getSubfieldPageList, behaviorRecord_gotoBuy } from '@/api/user.js'
-// import { behaviorRecord_gotoBuy } from '@/api/user.js'
 
 export default {
   data() {
@@ -67,14 +68,15 @@ export default {
       swiperOption: {
         notNextTick: true,
         direction: 'vertical',
-        // slidesPerView: 3,
+        // slidesPerView: 2,
         slidesPerView: 'auto',
+        // loopedSlides: 1,
         centeredSlides: true,
         // loop: true, // 循环
         // autoHeight: true,
         // autoplay: {
         //   // 自动播放
-        //   delay: 3000,
+        //   delay: 5000,
         //   stopOnLastSlide: false,
         //   disableOnInteraction: false
         // },
@@ -119,35 +121,7 @@ export default {
         //   leftActive: false,
         //   rightActive: false,
         //   hasChoose: false
-        // },
-        // {
-        //   title: '好吃又健康的面包，你更喜欢哪种？',
-        //   imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/43c2c00b30b548afc3df1aa132bd38fd',
-        //   leftName: '奶香手撕面包',
-        //   leftValue: 100,
-        //   imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/7b528dda3e354cb8ac8948f061f1c29b',
-        //   rightName: '海盐芝士蒸蛋糕',
-        //   rightValue: 100,
-        //   leftToken: '$0vN3cWGfbZJ$',
-        //   rightToken: '$wCDXcWgIrYw$',
-        //   leftActive: false,
-        //   rightActive: false,
-        //   hasChoose: false
-        // },
-        // {
-        //   title: '早餐喜欢吃哪种麦片？',
-        //   imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/7e89367ce3cf59ee3bad613d9e427203',
-        //   leftName: '西麦燕麦片',
-        //   leftValue: 100,
-        //   imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/166fc2cd2959256314c3aa6149b1324e',
-        //   rightName: '桂格即食燕麦片',
-        //   rightValue: 100,
-        //   leftToken: '$Lu5HcWTjCDE$',
-        //   rightToken: '$dUKzcWGhhZt$',
-        //   leftActive: false,
-        //   rightActive: false,
-        //   hasChoose: false
-        // },
+        // }
       ],
     }
   },
@@ -174,16 +148,34 @@ export default {
   created() {
     this.loadSubfieldPageList();
   },
+  destroyed: function () {
+    console.log("我已经离开了！");
+    // this.stopTimer();
 
-  mounted() {
+ },
+  mounted(e) {
     let ip = localStorage.getItem('Ip');
+    this.ip = ip;
     // let reg = new RegExp('.', 'g');
     let numIp = ip.replace(/\./g, '');
     this.userId = numIp.substring(numIp.length-9); // 取后9位作为userId
+    this.userId = this.getRandomInt(1,2147483640)
+    this.toEnter();
     console.log(this.userId);
   },
 
+  
+
   methods: {
+    getTime(){
+      setInterval(()=>{
+        //new Date() new一个data对象，当前日期和时间
+        //toLocaleString() 方法可根据本地时间把 Date 对象转换为字符串，并返回结果。
+        this.nowtime = new Date().toLocaleString();
+      },1000)
+    },
+    
+
     async handleChoose(index, type) {
       console.log(index);
       if(!this.cardlist[index].hasChoose) {
@@ -197,8 +189,7 @@ export default {
           this.cardlist[index].rightValue = this.cardlist[index].rightValue + this.getRandomInt(-50,100);
         }
         let pageName = type == 0 ? this.cardlist[index].leftName : this.cardlist[index].rightName;
-        // this.cardlist.findIndex((item,index) => {
-        // })
+
         const data = await behaviorRecord_like({
           active: 'like',
           typeId: 5,
@@ -227,13 +218,9 @@ export default {
       
     },
     async onCopy(e) {
-      // const data2 = await behaviorRecord_gotoBuy({
-      //   typeId: 6,
-      //   page: e.text,
-      //   userId: 1111
-      // });
       window.location.href = 'taobao://';
-      // 
+      // alert('商品淘口令已复制，请打开淘宝APP，前往购买！');
+
     },
     async handleBuy(item, type) {
       let pageName = type == 0 ? item.leftName : item.rightName;
@@ -253,6 +240,14 @@ export default {
         userId: parseInt(this.userId)
       });
     },
+    async toEnter() {
+      const data = await behaviorRecord_gotoBuy({
+        active: 'enter',
+        typeId: 8,
+        page: this.ip,
+        userId: parseInt(this.userId)
+      });
+    },
     onError(e) {
       console.log(e);
     },
@@ -263,8 +258,6 @@ export default {
         // 以下函数返回 min（包含）～ max（包含）之间的数字：
       this.data = Math.floor(Math.random() * (max - min + 1)) + min
       return this.data
-      //  函数返回 min（包含）～ max（不包含）之间的数字
-      //  this.data = Math.floor(Math.random() * (max - min) ) + min;
     },
     async loadSubfieldPageList() {
       const data = await getSubfieldPageList();
@@ -287,7 +280,7 @@ export default {
   .swiper-container {
     height: 100vh;
     .swiper-slide {
-      height: 936px;
+      height: 900px;
       margin: 30px 0;
     }
   }
