@@ -339,7 +339,7 @@ export default {
   }
   .card-item {
     background: #ffffff;
-    margin: 30px 0;
+    // margin: 30px 0;
     opacity: 1;
     border-radius: 8px;
     &.filter {
