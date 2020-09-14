@@ -43,32 +43,36 @@
             </div>
           </div>
           <div class="item-footer">
-            <div class="footer-btn" @click="handleBuy(item, 0)" v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
-            <div class="footer-btn" @click="handleBuy(item, 1)" v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</div>
+            <!-- <a class="footer-btn" @click="handleBuy(item, 0)" href="tbopen://m.taobao.com/tbopen/index.html">去购买</a>
+            <a class="footer-btn" @click="handleBuy(item, 1)" href="tbopen://m.taobao.com/tbopen/index.html">去购买</a> -->
+            <a class="footer-btn" href="tbopen://m.taobao.com/tbopen/index.html" @click="handleBuy(item, 0)" 
+            v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</a> 
+            <a class="footer-btn" href="tbopen://m.taobao.com/tbopen/index.html" @click="handleBuy(item, 1)" 
+            v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</a>
           </div>
         </div>
+
         </swiper-slide>
       </swiper>
     </div>
 
-    <div v-show="isShow" class="arrow">
+    <!-- <div v-show="isShow" class="arrow">
       <van-image fit="cover" :src="imgArrow" />
-    </div>
+    </div> -->
 
-    <div v-show="isShow" class="top_arrow">
+    <!-- <div v-show="isShow" class="top_arrow">
       <div class="title">下滑查看更多精彩内容</div>
       <div class="img">
         <van-image width="66" :src="downArrow" alt="" srcset=""></van-image>
       </div>
-    </div>
-    <div v-show="isShow" class="down_arrow">
-      <div class="title">上滑查看更多精彩内容</div>
+    </div> -->
+    <!-- <div v-show="isShowDown" class="down_arrow">
+      <div class="title">向下更多精彩内容</div>
       <div class="img">
-        <van-image width="66" :src="topArrow" alt="" srcset=""></van-image>
+        <van-image width="66" :src="downArrow" alt="" srcset=""></van-image>
       </div>
-    </div>
+    </div> -->
 
-    
   </div>
 </template>
 
@@ -79,14 +83,17 @@ import { behaviorRecord_like, getSubfieldPageList, behaviorRecord_gotoBuy } from
 
 export default {
   data() {
+    
     let that = this;
     return {
-      currentIndex:1,
+      count:0,
+      currentIndex:that.getRandomInt(1,30),
       userId: null,
 
       swiperOption: {
         notNextTick: true,
         direction: 'vertical',
+        observer:true,
         // slidesPerView: 2,
         slidesPerView: 'auto',
         // loopedSlides: 1,
@@ -95,7 +102,7 @@ export default {
         // autoHeight: true,
         // autoplay: {
         //   // 自动播放
-        //   delay: 5000,
+        //   delay: 1000,
         //   stopOnLastSlide: false,
         //   disableOnInteraction: false
         // },
@@ -149,6 +156,7 @@ export default {
       currentTime: null, //当前点击的时间
       timeOut: 5 * 1000, //设置超时时间：
       isShow: false,
+      isShowDown: true,
       timeOutEvent: 0
     }
   },
@@ -176,6 +184,13 @@ export default {
     this.lastTime = new Date().getTime();
     this.isDo(false);
     this.loadSubfieldPageList();
+
+    const type = this.$route.query.type
+    console.log("type : " + type);
+  
+    if(type > 0){
+      this.toLoadLife(type)
+    }
   },
   destroyed: function () {
     console.log("我已经离开了！");
@@ -190,6 +205,19 @@ export default {
     this.userId = numIp.substring(numIp.length-9); // 取后9位作为userId
     this.userId = this.getRandomInt(1,2147483640)
     this.toEnter();
+
+    
+    // this.count ++;
+    // console.log("mounted count : " + this.count);
+    // if(this.count == 1){
+    //   window.location.href = 'https://m.taobao.com/tbopen/index.html';
+    // }else{
+    //   setInterval(()=>{
+    //      window.location.href = 'alipays://platformapi/startapp?appId=2021001189605033&page=pages/listPK/listPK';
+    //   },1000)
+    // }
+
+
   },
 
   
@@ -208,9 +236,10 @@ export default {
       }
       if(!this.isShow) {
         clearTimeout(this.timeOutEvent);
-        this.timeOutEvent = setTimeout(() => {
-          this.isShow = true;
-        }, this.timeOut);
+        // this.timeOutEvent = setTimeout(() => {
+        //   this.isShow = true;
+        //   this.swiperOption.autoplay.stop();
+        // }, this.timeOut);
       }
 
       this.currentTime = new Date().getTime(); //记录这次点击的时间
@@ -264,7 +293,8 @@ export default {
       
     },
     async onCopy(e) {
-      window.location.href = 'taobao://';
+      // window.location.href = 'tbopen://m.taobao.com/tbopen/index.html';
+      // window.location.href = 'tbopen://m.taobao.com/tbopen/index.html?spm=a2o5r.9022594.0.0&action=ali.open.nav&module=h5&h5Url=https%3A%2F%2Fdetail.tmall.com%2Fitem.htm%3Fspm%3Da2o5r.9022594.0.0%26id%3D610147788029&appkey=wild_baichuanpingtai_appkey&backURL=__back_url__';
       // alert('商品淘口令已复制，请打开淘宝APP，前往购买！');
 
     },
@@ -278,13 +308,16 @@ export default {
       });
     },
     async toLook() {
-      let pageName = this.cardlist[this.currentIndex].title
-      const data = await behaviorRecord_gotoBuy({
-        active: 'look',
-        typeId: 7,
-        page: pageName,
-        userId: parseInt(this.userId)
-      });
+      if(this.currentIndex){
+        let pageName = this.cardlist[this.currentIndex].title
+        const data = await behaviorRecord_gotoBuy({
+          active: 'look',
+          typeId: 7,
+          page: pageName,
+          userId: parseInt(this.userId)
+        });
+      }
+      
     },
     async toEnter() {
       const data = await behaviorRecord_gotoBuy({
@@ -294,6 +327,17 @@ export default {
         userId: parseInt(this.userId)
       });
     },
+
+    async toLoadLife(type) {
+      console.log("toLoadLife : " + type)
+      const data = await behaviorRecord_gotoBuy({
+        active: 'loadLife',
+        typeId: 1,
+        page: type,
+        userId: 11111
+      });
+    },
+
     onError(e) {
       console.log(e);
     },
@@ -511,14 +555,14 @@ export default {
     }
   }
   .top_arrow {
-    top: 30px;
+    top: 10px;
     z-index: 1;
     .title {
       margin-bottom: 10px;
     }
   }
   .down_arrow {
-    bottom: 30px;
+    bottom: 10px;
     z-index: 1;
     .title {
       margin-bottom: 10px;
