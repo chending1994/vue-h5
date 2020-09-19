@@ -1,7 +1,7 @@
 <!-- home -->
 <template>
   <div class="index-container" @touchstart="isDo(true)">
-    
+    <van-image class="banner" fit="cover" :src="banner[0]" />
     <div class="swiper-box list">
       <swiper class="box-container" :options="swiperOption" ref="mySwiper">
         <swiper-slide
@@ -86,8 +86,9 @@ export default {
     
     let that = this;
     return {
+      banner:["https://supimage.miniprogramhacker.cn/uploadPic/1014fa9ad0e7dfd4c79e849884509a7e"],
       count:0,
-      currentIndex:that.getRandomInt(1,30),
+      currentIndex:that.getRandomInt(1,20),
       userId: null,
 
       swiperOption: {
@@ -97,9 +98,9 @@ export default {
         // slidesPerView: 2,
         slidesPerView: 'auto',
         // loopedSlides: 1,
-        centeredSlides: true,
+        // centeredSlides: true,
         // loop: true, // 循环
-        // autoHeight: true,
+        autoHeight: true,
         // autoplay: {
         //   // 自动播放
         //   delay: 1000,
@@ -368,11 +369,16 @@ export default {
 .index-container {
   position: relative;
   background: #f5f5f5;
+  .banner{
+    // height: 20vh;
+    width:100%;
+    justify-content: center;
+  }
   .swiper-container {
-    height: 100vh;
+    height: 80vh;
     .swiper-slide {
-      height: 900px;
-      margin: 30px 0;
+      height: 80vh;
+      margin: 30px 0px;
     }
   }
   .list {
@@ -383,7 +389,6 @@ export default {
   }
   .card-item {
     background: #ffffff;
-    // margin: 30px 0;
     opacity: 1;
     border-radius: 8px;
     &.filter {
