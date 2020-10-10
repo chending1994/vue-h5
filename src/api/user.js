@@ -30,7 +30,7 @@ export function getUserInfo(data) {
 // 用户名称 get 方法
 export function behaviorRecord_gotoBuy(data) {
   return request({
-    url: 'test/rest/behaviorRecord/insert',
+    url: 'rest/behaviorRecord/insert',
     method: 'post',
     headers:{
       'content-type': 'application/x-www-form-urlencoded'
@@ -43,7 +43,7 @@ export function behaviorRecord_gotoBuy(data) {
 
 export function behaviorRecord_like(data) {
   return request({
-    url: 'test/rest/behaviorRecord/insert',
+    url: 'rest/behaviorRecord/insert',
     method: 'post',
     headers:{
       'content-type': 'application/x-www-form-urlencoded'
@@ -56,7 +56,7 @@ export function behaviorRecord_like(data) {
 
 export function getSubfieldPageList(params) {
   return request({
-    url: 'test/rest/subfield/pageList',
+    url: 'rest/subfield/pageList',
     method: 'get',
     headers:{
       'content-type': 'application/x-www-form-urlencoded'

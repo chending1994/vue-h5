@@ -1,7 +1,13 @@
 <!-- home -->
 <template>
   <div class="index-container" @touchstart="isDo(true)">
-    <van-image class="banner" fit="cover" :src="banner[0]" />
+    <!-- <van-image class="banner" fit="cover" :src="bannerList[bannerIndex].img" @click="handleBanner(bannerIndex, bannerList[bannerIndex])"/> -->
+    
+    <!-- <div class="footer-btn" @click="openApp()" v-clipboard:copy="token">点击唤醒app</div> -->
+
+    <!-- <div class="footer-btn" @click="openApp()" 
+            v-clipboard:copy="token" v-clipboard:success="onCopy" v-clipboard:error="onError">点击唤醒app</div>  -->
+    
     <div class="swiper-box list">
       <swiper class="box-container" :options="swiperOption" ref="mySwiper">
         <swiper-slide
@@ -14,7 +20,7 @@
             <div class="item-content-left" @click="handleChoose(index, 0)">
               <van-image fit="cover" :src="item.leftImage" />
               <div :class="item.leftActive||item.rightActive?'mask2':'mask'"></div>
-              <div class="tag">#{{item.leftName}}#</div>
+              <div class="tag" v-if="item.leftName">#{{item.leftName}}#</div>
               <div class="vote" v-if="item.hasChoose">
                 <div class="line nor">
                   <div
@@ -29,7 +35,7 @@
             <div class="item-content-right" @click="handleChoose(index, 1)">
               <van-image fit="cover" :src="item.rightImage" />
               <div :class="item.leftActive||item.rightActive?'mask2':'mask'"></div>
-              <div class="tag">#{{item.rightName}}#</div>
+              <div class="tag" v-if="item.rightName">#{{item.rightName}}#</div>
               <div class="vote" v-if="item.hasChoose">
                 <div class="line active">
                   <div
@@ -42,13 +48,18 @@
               </div>
             </div>
           </div>
-          <div class="item-footer">
+          <div class="item-footer" >
             <!-- <a class="footer-btn" @click="handleBuy(item, 0)" href="tbopen://m.taobao.com/tbopen/index.html">去购买</a>
             <a class="footer-btn" @click="handleBuy(item, 1)" href="tbopen://m.taobao.com/tbopen/index.html">去购买</a> -->
-            <a class="footer-btn" href="tbopen://m.taobao.com/tbopen/index.html" @click="handleBuy(item, 0)" 
+            <a v-if="item.leftToken" class="footer-btn" href="tbopen://m.taobao.com/tbopen/index.html" @click="handleBuy(item, 0)" 
             v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</a> 
-            <a class="footer-btn" href="tbopen://m.taobao.com/tbopen/index.html" @click="handleBuy(item, 1)" 
+            <a v-if="item.leftToken" class="footer-btn" href="tbopen://m.taobao.com/tbopen/index.html" @click="handleBuy(item, 1)" 
             v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</a>
+            
+            <a v-if="item.guanggaoleftURL" class="footer-btn" :href="item.guanggaoleftURL" @click="handleBuy(item, 0)" 
+            v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去看看</a> 
+            <a v-if="item.guanggaorightURL" class="footer-btn" :href="item.guanggaorightURL" @click="handleBuy(item, 1)" 
+            v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去看看</a>
           </div>
         </div>
 
@@ -77,20 +88,29 @@
 </template>
 
 <script>
-
-
 import { behaviorRecord_like, getSubfieldPageList, behaviorRecord_gotoBuy } from '@/api/user.js'
-
 export default {
   data() {
     
     let that = this;
     return {
-      banner:["https://supimage.miniprogramhacker.cn/uploadPic/1014fa9ad0e7dfd4c79e849884509a7e"],
-      count:0,
-      currentIndex:that.getRandomInt(1,20),
-      userId: null,
+      token:'￥TUE7cgTpRnl￥',
+      bannerList: 
+      [{title:"广告banner1",img:"https://supimage.miniprogramhacker.cn/uploadPic/1014fa9ad0e7dfd4c79e849884509a7e",
+      url:"alipays://platformapi/startapp?appId=2021001174628919&page=pages/ActivitySnapUp/ActivitySnapUp"},
+      {title:"广告banner2",img:"https://supimage.miniprogramhacker.cn/uploadPic/107a5c7adab1083f07f52f21af71c89f",
+      url:"alipays://platformapi/startapp?appId=2021001174628919&page=pages/ActivitySnapUp/ActivitySnapUp"},
+      ],
+      bannerIndex:0,
 
+      currentIndex:0,
+      userId: null,
+      like:205,
+      gotoBuy:206,
+      look:207,
+      enter:208,
+      banner:209,
+      
       swiperOption: {
         notNextTick: true,
         direction: 'vertical',
@@ -98,7 +118,7 @@ export default {
         // slidesPerView: 2,
         slidesPerView: 'auto',
         // loopedSlides: 1,
-        // centeredSlides: true,
+        centeredSlides: true,
         // loop: true, // 循环
         autoHeight: true,
         // autoplay: {
@@ -127,7 +147,8 @@ export default {
           slideChange:function(){
             if(that.currentIndex != this.realIndex){
               that.currentIndex = this.realIndex;
-              console.log(that.currentIndex)
+              // console.log(that.banner)
+              that.bannerIndex = that.currentIndex % that.bannerList.length
               that.toLook()
             }
           }
@@ -137,21 +158,110 @@ export default {
       topArrow: require('../../assets/images/top_arrow.png'),
       downArrow: require('../../assets/images/down_arrow.png'),
       cardlist: [
-        // {
-        //   title: '谁才是真正的螺蛳粉之王？',
-        //   imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/a34fcd06283d414cdbde8593b65cd815',
-        //   leftName: '好欢螺',
-        //   leftValue: 100,
-        //   imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/934f4f1bf573386c9d05c447d07dee9b',
-        //   rightName: '螺霸王',
-        //   rightValue: 100,
-        //   leftToken: '$Tv7KcWc4EsQ$',
-        //   rightToken: '$UnjDcWTRwDy$',
-        //   leftActive: false,
-        //   rightActive: false,
-        //   hasChoose: false
-        // }
+        {
+          title: '谁才是真正的螺蛳粉之王？',
+          imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/a34fcd06283d414cdbde8593b65cd815',
+          leftName: '好欢螺',
+          leftValue: 100,
+          imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/934f4f1bf573386c9d05c447d07dee9b',
+          rightName: '螺霸王',
+          rightValue: 100,
+          leftToken: '$Tv7KcWc4EsQ$',
+          rightToken: '$UnjDcWTRwDy$',
+          leftActive: false,
+          rightActive: false,
+          hasChoose: false
+        }
       ],
+      guanggao:[
+        {
+          title: '哪个梗最近上了各大新闻热搜？',
+          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/4afa6eb3fb25812f587fae938d7ff0cd',
+          leftName: '秋天的第一杯奶茶',
+          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/f7158878268f1071d2067d538b3f2b8f',
+          rightName: '秋天的第一杯咖啡',
+
+          rightValue: 100,
+          leftValue: 100,
+          leftActive: false,
+          rightActive: false,
+          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
+          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
+          hasChoose: false,
+          hasClose: false
+        },
+        {
+          title: '你觉得国内疫情还会二次爆发吗？',
+          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/d5ba3dac57ffed9f90dc059e8411ef68',
+          leftName: '会',
+          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/f9aec8a10122c0aa3e2d9c65f95b1081',
+          rightName: '不会',
+
+          rightValue: 100,
+          leftValue: 100,
+          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
+          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
+          hasChoose: false,
+          hasClose: false
+        },
+        {
+          title: '你觉得哪部热门电影票房会更高？',
+          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/23bf2264f7b8f679b09944eb1ce90026',
+          leftName: '八百',
+          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/06e26025c95a1d71245a2aee9173ce7a',
+          rightName: '冠军',
+
+          rightValue: 100,
+          leftValue: 100,
+          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
+          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
+          hasChoose: false,
+          hasClose: false
+        } ,
+        {
+          title: '美国总统大选你觉得谁会胜出？',
+          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/773d933bba3ba53fbfa1449f76203842',
+          leftName: '拜登',
+          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/5d937472ca1a332f4142ee1bffacdc4f',
+          rightName: '特朗普',
+
+          rightValue: 100,
+          leftValue: 100,
+          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
+          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
+          hasChoose: false,
+          hasClose: false
+        } ,
+        {
+          title: '范冰冰复出了，你觉得她还会再次爆红吗？',
+          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/d5ba3dac57ffed9f90dc059e8411ef68',
+          leftName: '会',
+          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/f9aec8a10122c0aa3e2d9c65f95b1081',
+          rightName: '不会',
+
+          rightValue: 100,
+          leftValue: 100,
+          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
+          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
+          hasChoose: false,
+          hasClose: false
+        } ,
+        {
+          title: '马伊琍和秦海璐，你觉得谁更有气质？',
+          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/63e6279fd4f36d2a71ffaa151f2cbfff',
+          leftName: '马伊琍',
+          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/9916b87411c40605ef5bc80e3c0ee049',
+          rightName: '秦海璐',
+
+          rightValue: 100,
+          leftValue: 100,
+          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
+          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
+          hasChoose: false,
+          hasClose: false
+        }  
+      ],
+
 
       lastTime: null, //最后一次点击的时间
       currentTime: null, //当前点击的时间
@@ -197,7 +307,7 @@ export default {
     console.log("我已经离开了！");
     // this.stopTimer();
 
- },
+  },
   mounted(e) {
     let ip = localStorage.getItem('Ip');
     this.ip = ip;
@@ -208,21 +318,18 @@ export default {
     this.toEnter();
 
     
-    // this.count ++;
-    // console.log("mounted count : " + this.count);
-    // if(this.count == 1){
-    //   window.location.href = 'https://m.taobao.com/tbopen/index.html';
-    // }else{
-    //   setInterval(()=>{
-    //      window.location.href = 'alipays://platformapi/startapp?appId=2021001189605033&page=pages/listPK/listPK';
-    //   },1000)
-    // }
-
-
   },
 
   
   methods: {
+    openApp(){
+      // window.location.href = "taobao://item.taobao.com/item.html?id=520553024247"; 
+      // window.location.href = "tbopen://"; 
+      window.location.href = "http://ma.taobao.com/ZhEm81"; 
+      // window.location.href = "taobao://item.taobao.com/item.html"; 
+       
+    },
+
     getTime(){
       setInterval(()=>{
         //new Date() new一个data对象，当前日期和时间
@@ -251,9 +358,27 @@ export default {
       // }
     },
     
+    async handleBanner(index,info){
+      console.log(info.title)
+      console.log(info.img)
+      window.location.href = info.url;
+      const data = await behaviorRecord_like({
+        active: 'banner',
+        typeId: this.banner,
+        page: info.title,
+        userId: parseInt(this.userId)
+      });
+    },
 
     async handleChoose(index, type) {
       console.log(index);
+      if(this.cardlist[index].guanggaoURL){
+        window.location.href = this.cardlist[index].guanggaoURL;
+        this.cardlist.splice(index,1);
+        return
+      }
+
+
       if(!this.cardlist[index].hasChoose) {
         if(type == 0) {
           this.cardlist[index].leftActive = true;
@@ -268,7 +393,7 @@ export default {
 
         const data = await behaviorRecord_like({
           active: 'like',
-          typeId: 5,
+          typeId: this.like,
           page: pageName,
           userId: parseInt(this.userId)
         });
@@ -294,7 +419,7 @@ export default {
       
     },
     async onCopy(e) {
-      // window.location.href = 'tbopen://m.taobao.com/tbopen/index.html';
+      window.location.href = 'qqnews://article_9527?nm=20200703A01PTF00&from=xsn189';
       // window.location.href = 'tbopen://m.taobao.com/tbopen/index.html?spm=a2o5r.9022594.0.0&action=ali.open.nav&module=h5&h5Url=https%3A%2F%2Fdetail.tmall.com%2Fitem.htm%3Fspm%3Da2o5r.9022594.0.0%26id%3D610147788029&appkey=wild_baichuanpingtai_appkey&backURL=__back_url__';
       // alert('商品淘口令已复制，请打开淘宝APP，前往购买！');
 
@@ -303,27 +428,35 @@ export default {
       let pageName = type == 0 ? item.leftName : item.rightName;
       const data = await behaviorRecord_gotoBuy({
         active: 'gotoBuy',
-        typeId: 6,
+        typeId: this.gotoBuy,
         page: pageName,
         userId: parseInt(this.userId)
       });
     },
     async toLook() {
-      if(this.currentIndex){
+      
+      if(this.currentIndex && this.cardlist.length > this.currentIndex){
         let pageName = this.cardlist[this.currentIndex].title
         const data = await behaviorRecord_gotoBuy({
           active: 'look',
-          typeId: 7,
+          typeId: this.look,
           page: pageName,
           userId: parseInt(this.userId)
         });
+      }
+
+      if(this.currentIndex > 2){
+        let count = this.currentIndex % 3
+        if(count == 0){
+          this.cardlist.splice(this.currentIndex + 1,0,this.guanggao[0])
+        }
       }
       
     },
     async toEnter() {
       const data = await behaviorRecord_gotoBuy({
         active: 'enter',
-        typeId: 8,
+        typeId: this.enter,
         page: this.ip,
         userId: parseInt(this.userId)
       });
@@ -333,7 +466,7 @@ export default {
       console.log("toLoadLife : " + type)
       const data = await behaviorRecord_gotoBuy({
         active: 'loadLife',
-        typeId: 1,
+        typeId: 101,
         page: type,
         userId: 11111
       });
@@ -353,7 +486,7 @@ export default {
     async loadSubfieldPageList() {
       const data = await getSubfieldPageList();
       if(data.code == 1) {
-        this.cardlist = data.data;
+        this.cardlist = this.guanggao.concat(data.data);
       } else {
         this.$toast({
           message: data.msg,
@@ -363,6 +496,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -372,12 +506,11 @@ export default {
   .banner{
     // height: 20vh;
     width:100%;
-    justify-content: center;
   }
   .swiper-container {
-    height: 80vh;
+    height: 100vh;
     .swiper-slide {
-      height: 80vh;
+      height: 900px;
       margin: 30px 0px;
     }
   }
