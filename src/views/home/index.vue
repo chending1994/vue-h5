@@ -48,6 +48,10 @@
               </div>
             </div>
           </div>
+          <div class="item-footer-text">
+            <div style="width:50%;text-align:center;">{{item.leftExtense1}}万人正在观看</div>
+            <div style="width:50%;text-align:center;">{{item.rightExtense1}}万人正在观看</div>
+          </div>
           <div class="item-footer" >
             <!-- <a class="footer-btn" @click="handleBuy(item, 0)" href="tbopen://m.taobao.com/tbopen/index.html">去购买</a>
             <a class="footer-btn" @click="handleBuy(item, 1)" href="tbopen://m.taobao.com/tbopen/index.html">去购买</a> -->
@@ -56,9 +60,9 @@
             <a v-if="item.leftToken" class="footer-btn" href="tbopen://m.taobao.com/tbopen/index.html" @click="handleBuy(item, 1)" 
             v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去购买</a>
             
-            <a v-if="item.guanggaoleftURL" class="footer-btn" :href="item.guanggaoleftURL" @click="handleBuy(item, 0)" 
+            <a v-if="item.leftAdUrl" :class="['footer-btn-look', index == currentIndex ?  'animationViewScale_112' : 'animationViewScale_112']" :href="item.leftAdUrl" @click="handleBuy(item, 0)" 
             v-clipboard:copy="item.leftToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去看看</a> 
-            <a v-if="item.guanggaorightURL" class="footer-btn" :href="item.guanggaorightURL" @click="handleBuy(item, 1)" 
+            <a v-if="item.rightAdUrl" :class="['footer-btn-look', index == currentIndex ?  'animationViewScale_112' : 'animationViewScale_112']" :href="item.rightAdUrl" @click="handleBuy(item, 1)" 
             v-clipboard:copy="item.rightToken" v-clipboard:success="onCopy" v-clipboard:error="onError">去看看</a>
           </div>
         </div>
@@ -158,110 +162,22 @@ export default {
       topArrow: require('../../assets/images/top_arrow.png'),
       downArrow: require('../../assets/images/down_arrow.png'),
       cardlist: [
-        {
-          title: '谁才是真正的螺蛳粉之王？',
-          imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/a34fcd06283d414cdbde8593b65cd815',
-          leftName: '好欢螺',
-          leftValue: 100,
-          imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/934f4f1bf573386c9d05c447d07dee9b',
-          rightName: '螺霸王',
-          rightValue: 100,
-          leftToken: '$Tv7KcWc4EsQ$',
-          rightToken: '$UnjDcWTRwDy$',
-          leftActive: false,
-          rightActive: false,
-          hasChoose: false
-        }
+        // {
+        //   title: '谁才是真正的螺蛳粉之王？',
+        //   imgLeftUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/a34fcd06283d414cdbde8593b65cd815',
+        //   leftName: '好欢螺',
+        //   leftValue: 100,
+        //   imgRightUrl: 'https://supimage.miniprogramhacker.cn/uploadPic/934f4f1bf573386c9d05c447d07dee9b',
+        //   rightName: '螺霸王',
+        //   rightValue: 100,
+        //   leftToken: '$Tv7KcWc4EsQ$',
+        //   rightToken: '$UnjDcWTRwDy$',
+        //   leftActive: false,
+        //   rightActive: false,
+        //   hasChoose: false
+        // }
       ],
-      guanggao:[
-        {
-          title: '哪个梗最近上了各大新闻热搜？',
-          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/4afa6eb3fb25812f587fae938d7ff0cd',
-          leftName: '秋天的第一杯奶茶',
-          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/f7158878268f1071d2067d538b3f2b8f',
-          rightName: '秋天的第一杯咖啡',
-
-          rightValue: 100,
-          leftValue: 100,
-          leftActive: false,
-          rightActive: false,
-          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
-          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
-          hasChoose: false,
-          hasClose: false
-        },
-        {
-          title: '你觉得国内疫情还会二次爆发吗？',
-          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/d5ba3dac57ffed9f90dc059e8411ef68',
-          leftName: '会',
-          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/f9aec8a10122c0aa3e2d9c65f95b1081',
-          rightName: '不会',
-
-          rightValue: 100,
-          leftValue: 100,
-          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
-          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
-          hasChoose: false,
-          hasClose: false
-        },
-        {
-          title: '你觉得哪部热门电影票房会更高？',
-          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/23bf2264f7b8f679b09944eb1ce90026',
-          leftName: '八百',
-          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/06e26025c95a1d71245a2aee9173ce7a',
-          rightName: '冠军',
-
-          rightValue: 100,
-          leftValue: 100,
-          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
-          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
-          hasChoose: false,
-          hasClose: false
-        } ,
-        {
-          title: '美国总统大选你觉得谁会胜出？',
-          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/773d933bba3ba53fbfa1449f76203842',
-          leftName: '拜登',
-          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/5d937472ca1a332f4142ee1bffacdc4f',
-          rightName: '特朗普',
-
-          rightValue: 100,
-          leftValue: 100,
-          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
-          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
-          hasChoose: false,
-          hasClose: false
-        } ,
-        {
-          title: '范冰冰复出了，你觉得她还会再次爆红吗？',
-          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/d5ba3dac57ffed9f90dc059e8411ef68',
-          leftName: '会',
-          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/f9aec8a10122c0aa3e2d9c65f95b1081',
-          rightName: '不会',
-
-          rightValue: 100,
-          leftValue: 100,
-          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
-          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
-          hasChoose: false,
-          hasClose: false
-        } ,
-        {
-          title: '马伊琍和秦海璐，你觉得谁更有气质？',
-          leftImage: 'https://supimage.miniprogramhacker.cn/uploadPic/63e6279fd4f36d2a71ffaa151f2cbfff',
-          leftName: '马伊琍',
-          rightImage: 'https://supimage.miniprogramhacker.cn/uploadPic/9916b87411c40605ef5bc80e3c0ee049',
-          rightName: '秦海璐',
-
-          rightValue: 100,
-          leftValue: 100,
-          guanggaoleftURL:"qqnews://article_9527?nm=20200703A01PTF00&from=xsn189",
-          guanggaorightURL:"http://redirect.zookingsoft.com/Api/Redirect/jump?url=cXFuZXdzOi8vYXJ0aWNsZV85NTI3P25tPTIwMjAwNzAzQTAxUFRGMDAmZnJvbT14c24xODk=",
-          hasChoose: false,
-          hasClose: false
-        }  
-      ],
-
+      
 
       lastTime: null, //最后一次点击的时间
       currentTime: null, //当前点击的时间
@@ -372,12 +288,6 @@ export default {
 
     async handleChoose(index, type) {
       console.log(index);
-      if(this.cardlist[index].guanggaoURL){
-        window.location.href = this.cardlist[index].guanggaoURL;
-        this.cardlist.splice(index,1);
-        return
-      }
-
 
       if(!this.cardlist[index].hasChoose) {
         if(type == 0) {
@@ -427,7 +337,7 @@ export default {
     async handleBuy(item, type) {
       let pageName = type == 0 ? item.leftName : item.rightName;
       const data = await behaviorRecord_gotoBuy({
-        active: 'gotoBuy',
+        active: 'gotoBuy_' + this.currentIndex,
         typeId: this.gotoBuy,
         page: pageName,
         userId: parseInt(this.userId)
@@ -445,12 +355,6 @@ export default {
         });
       }
 
-      if(this.currentIndex > 2){
-        let count = this.currentIndex % 3
-        if(count == 0){
-          this.cardlist.splice(this.currentIndex + 1,0,this.guanggao[0])
-        }
-      }
       
     },
     async toEnter() {
@@ -486,7 +390,15 @@ export default {
     async loadSubfieldPageList() {
       const data = await getSubfieldPageList();
       if(data.code == 1) {
-        this.cardlist = this.guanggao.concat(data.data);
+        let array = data.data
+        for (let index = 0; index < array.length; index++) {
+          const element = array[index];
+          element.leftExtense1 = parseFloat(element.leftExtense1).toFixed(2);
+          element.rightExtense1 = parseFloat(element.rightExtense1).toFixed(2);
+        }
+        // console.log(array)
+        this.cardlist = array;
+
       } else {
         this.$toast({
           message: data.msg,
@@ -649,11 +561,18 @@ export default {
       height: 100%;
     }
   }
+  .item-footer-text{
+    // text-align: end;
+    // margin-right: 30px;
+    display: flex;
+    flex-direction: row;
+    margin: 5px 30px 0 30px;
+  }
   .item-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 30px 77px 30px 68px;
+    justify-content: space-around;
+    padding: 10px 30px 30px 30px;
     .footer-btn {
       width: 183px;
       height: 64px;
@@ -665,6 +584,20 @@ export default {
       font-size: 24px;
       font-family: PingFangSC-Medium;
       color: #fd6a52;
+      opacity: 1;
+    }
+    .footer-btn-look {
+      width: 183px;
+      height: 60px;
+      line-height: 60px;
+      border: 1px solid #fe6b50;
+      background: #fd6a52;
+      text-align: center;
+      opacity: 1;
+      border-radius: 45px;
+      font-size: 24px;
+      font-family: PingFangSC-Medium;
+      color: #fff;
       opacity: 1;
     }
   }
@@ -708,6 +641,30 @@ export default {
   }
 }
 
+
+.animationViewScale_112{
+    animation: 1.5s ease-in alternate infinite seconddiv;
+}
+
+// @keyframes seconddiv{
+// 0% {transform: scale(1.12,1.12);}
+// 10% {transform: scale(1,1);}
+// 25% {transform: scale(1.15,1.15);}
+// 50% {transform: scale(1,1);}
+// 70% {transform: scale(1.15,1.15);}
+// 100% {transform: scale(1,1);}
+// }
+@keyframes seconddiv{
+0% {transform: scale(1.12,1.12);}
+20% {transform: scale(1,1);}
+40% {transform: scale(1.12,1.12);}
+60% {transform: scale(1,1);}
+80% {transform: scale(1.12,1.12);}
+100% {transform: scale(1,1);}
+}
+
+
+
 @keyframes rocket {
   0% {
     -webkit-transform: translateY(0px);
@@ -718,6 +675,7 @@ export default {
     transform: translateY(-300px);
   }
 }
+
 @keyframes arrow {
   0% {
     -webkit-transform: translateY(0px);
