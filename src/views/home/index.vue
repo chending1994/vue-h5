@@ -116,15 +116,14 @@ export default {
       banner:209,
       
       swiperOption: {
-        notNextTick: true,
+        // notNextTick: true,
         direction: 'vertical',
-        observer:true,
         // slidesPerView: 2,
         slidesPerView: 'auto',
         // loopedSlides: 1,
         centeredSlides: true,
-        // loop: true, // 循环
-        autoHeight: true,
+        spaceBetween: 30, // 图片之间间隙间隔
+        // autoHeight: true,
         // autoplay: {
         //   // 自动播放
         //   delay: 1000,
@@ -133,9 +132,9 @@ export default {
         // },
         // loop: true, // 循环
         // directionType: 'horizontal', // 方向
-        observer: true, // 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
-        observeParents: true, // 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新。
-        setWrapperSize: true, // Swiper使用flexbox布局(display: flex)，
+        // observer: true, // 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
+        // observeParents: true, // 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新。
+        // setWrapperSize: true, // Swiper使用flexbox布局(display: flex)，
         // 开启这个设定会在Wrapper上添加等于slides相加的宽或高，在对flexbox布局的支持不是很好的浏览器中可能需要用到。
         
         pagination: {
@@ -150,8 +149,7 @@ export default {
         on:{
           slideChange:function(){
             if(that.currentIndex != this.realIndex){
-              that.currentIndex = this.realIndex;
-              // console.log(that.banner)
+              // that.currentIndex = this.realIndex;
               that.bannerIndex = that.currentIndex % that.bannerList.length
               that.toLook()
             }
@@ -423,7 +421,7 @@ export default {
     height: 100vh;
     .swiper-slide {
       height: 900px;
-      margin: 30px 0px;
+      // margin: 30px 0px;
     }
   }
   .list {
@@ -436,9 +434,9 @@ export default {
     background: #ffffff;
     opacity: 1;
     border-radius: 8px;
-    &.filter {
-      filter: blur(5px);
-    }
+    // &.filter {
+    //   filter: blur(5px);
+    // }
     .item-header {
       height: 50px;
       font-size: 36px;
@@ -448,6 +446,15 @@ export default {
       opacity: 1;
       padding: 36px 29px 29px;
     }
+  }
+  .swiper-slide-prev {
+    filter: blur(5px);
+  }
+  .swiper-slide-next {
+    filter: blur(5px);
+  }
+  .swiper-slide-active {
+
   }
   .item-content {
     position: relative;
